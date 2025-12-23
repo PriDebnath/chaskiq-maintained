@@ -174,10 +174,10 @@
     "dev": "NODE_ENV=development node ./esbuild.config.mjs --watch",
     "heroku-postbuild": "rm -R node_modules;npm cache clean --force",
     "chaskiq:dev": "./bin/dev",
-    "docker:build": "docker compose build",
-    "docker:up": "docker compose up -d",
+    "docker:build": "docker compose build --no-cache",
     "docker:db:setup":"docker-compose run rails rails db:setup",
-    "docker:db:reset": "docker compose run --rm rails bundle exec rails db:drop db:create db:migrate db:seed",
-    "docker:db:run:add-admin": "docker compose run --rm rails bundle exec rails admin_generator"
+    "docker:db:run:add-admin": "docker compose run --rm rails bundle exec rails admin_generator",
+    "docker:up": "docker compose up",
+    "docker:db:reset": "docker compose run --rm rails bundle exec rails db:drop db:create db:migrate db:seed"
   }
 }
