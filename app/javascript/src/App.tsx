@@ -13,20 +13,21 @@ import ErrorBoundary from '@chaskiq/components/src/components/ErrorBoundary';
 import { Auth0Provider } from '@auth0/auth0-react';
 
 function App() {
-  const host: string = document
-    .querySelector("meta[name='chaskiq-host']")
-    .getAttribute('content');
-  const chaskiqHost: string = new URL(host).hostname;
+  const hostMeta = document.querySelector("meta[name='chaskiq-host']");
+  const host: string = hostMeta?.getAttribute('content') || window.location.origin;
+  // Handle both "localhost" and "http://localhost:3000" formats
+  const hostUrl = host.startsWith('http') ? host : `http://${host}`;
+  const chaskiqHost: string = new URL(hostUrl).hostname;
 
-  //@ts-ignore
-  const auth0Domain = document.querySelector(
+  const auth0DomainMeta = document.querySelector(
     'meta[name="auth0-domain"]'
-  )?.content;
+  ) as HTMLMetaElement | null;
+  const auth0Domain = auth0DomainMeta?.content;
 
-  //@ts-ignore
-  const auth0ClientId = document.querySelector(
+  const auth0ClientIdMeta = document.querySelector(
     'meta[name="auth0-client-id"]'
-  )?.content;
+  ) as HTMLMetaElement | null;
+  const auth0ClientId = auth0ClientIdMeta?.content;
 
   return (
     <Provider store={store}>
