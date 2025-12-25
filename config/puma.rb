@@ -28,7 +28,6 @@ environment ENV.fetch('RAILS_ENV') { 'development' }
 # Puma 6 new options
 # https://github.com/puma/puma/blob/master/6.0-Upgrade.md
 
-wait_for_less_busy_worker
 # nakayoshi_fork # this wasd eprecated in version 6
 
 # Specifies the number of `workers` to boot in clustered mode.
@@ -37,7 +36,9 @@ wait_for_less_busy_worker
 # Workers do not work on JRuby or Windows (both of which do not support
 # processes).
 #
-# workers ENV.fetch("WEB_CONCURRENCY") { 2 }
+workers_count = ENV.fetch("WEB_CONCURRENCY") { 0 }.to_i
+workers workers_count if workers_count > 0
+wait_for_less_busy_worker if workers_count > 1
 
 # Use the `preload_app!` method when specifying a `workers` number.
 # This directive tells Puma to first boot the application and load code
@@ -46,8 +47,12 @@ wait_for_less_busy_worker
 #
 # preload_app!
 
-on_worker_boot do
-  ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
+# Only establish connection in cluster mode (workers > 0)
+# In single mode, Rails handles the connection automatically
+if workers_count > 0
+  on_worker_boot do
+    ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
+  end
 end
 
 # Allow puma to be restarted by `rails restart` command.

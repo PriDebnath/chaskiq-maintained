@@ -35,12 +35,13 @@ Rails.application.configure do
   config.action_mailer.preview_paths << "#{Rails.root}/spec/mailers/previews"
 
   host = ENV.fetch('HOST') { 'http://localhost:3000' }
-  ws   = ENV.fetch('WS') { 'ws://locahost:3000/cable' }
+  ws   = ENV.fetch('WS') { 'ws://localhost:3000/cable' }
 
   Rails.application.routes.default_url_options = { host: host }
   config.action_controller.default_url_options = { host: host }
   config.action_mailer.default_url_options = { host: host }
-  config.action_controller.asset_host = host
+  # Disable asset_host in development to serve assets directly
+  # config.action_controller.asset_host = host
 
   # config.action_cable.url = "ws://localhost:3334/cable"
   config.action_cable.url = ws
