@@ -176,8 +176,8 @@
     "chaskiq:dev": "./bin/dev",
     "docker:build": "docker compose build --no-cache",
     "docker:db:setup":"docker-compose run rails rails db:setup",
-    "docker:db:run:add-admin": "docker compose run --rm rails bundle exec rails admin_generator",
+    "docker:db:add-admin": "docker compose run --rm rails bundle exec rails admin_generator",
     "docker:up": "docker compose up",
-    "docker:db:reset": "docker compose run --rm rails bundle exec rails db:drop db:create db:migrate db:seed"
+    "docker:down": "docker compose down --volumes --remove-orphans"
   }
 }
